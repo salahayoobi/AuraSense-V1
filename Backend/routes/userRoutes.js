@@ -17,8 +17,8 @@ router.post('/auth', authUser);
 router.post('/', registerUser);
 router.post('/logout', logoutUser);
 router.route('/profile').get(protect, getUserProfile).put(protect, updateUserProfile);
-router.post('/add-favourites', addToFavourites)
+router.post('/add-favourites', protect, addToFavourites)
 router.post('/recommend-perfumes', getPerfumeRecommendationsHandler);
-router.get('/favourites', getFavourites);
-router.delete('/favourites/remove', removePerfumeFromFavorites);
+router.get('/favourites', protect, getFavourites);
+router.delete('/favourites/remove', protect, removePerfumeFromFavorites);
 export default router;
