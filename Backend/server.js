@@ -17,6 +17,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser());
 const corsOptions = {
     origin: "https://aura-sense.netlify.app",
+    credentials: true
 }
 app.use(cors(corsOptions));
 app.use('/api/users', userRoutes);
