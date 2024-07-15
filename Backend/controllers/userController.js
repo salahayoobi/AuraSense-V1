@@ -160,11 +160,11 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 const getPerfumeRecommendations = async (description) => {
-    const prompt = `Based on the following description, recommend some perfumes, I only need the name, notes and description about the perfumes: ${description}`;
-
+    const prompt = `Based on the following description, recommend some perfumes, I only need the name, notes,description and price( in indian) of the perfumes: ${description}`;
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
+    console.log("text" , text)
     return text;
 
 };
