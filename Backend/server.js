@@ -8,10 +8,12 @@ import connectDB from './config/db.js';
 import userRoutes from './routes/userRoutes.js';
 import cors from 'cors';
 import { specs, swaggerUi } from './config/swaggerConfig.js';
+import YAML from 'yamljs';
 
 connectDB();
 
 const port = process.env.PORT || 5000;
+const swaggerDocument = YAML.load('Backend/config/swaggerDocument.yaml');
 
 const app = express();
 app.use(express.json());
@@ -23,7 +25,7 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 app.use('/api/users', userRoutes);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.get('/', (req, res) => res.send('Server is ready'));
 
 app.use(notFound);

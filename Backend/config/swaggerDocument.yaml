@@ -1,0 +1,211 @@
+openapi: 3.0.0
+info:
+  title: Perfume API
+  description: API for managing users and perfume recommendations
+  version: 1.0.0
+servers:
+  - url: http://localhost:5000/api
+tags:
+  - name: Users
+    description: User management and authentication
+
+paths:
+  /users/auth:
+    post:
+      summary: Authenticate a user
+      tags: [Users]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        200:
+          description: Authentication successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  name:
+                    type: string
+                  email:
+                    type: string
+                  token:
+                    type: string
+        401:
+          description: Invalid email or password
+
+  /users:
+    post:
+      summary: Register a new user
+      tags: [Users]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - email
+                - password
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        201:
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  name:
+                    type: string
+                  email:
+                    type: string
+                  token:
+                    type: string
+        400:
+          description: Invalid user data
+
+  /users/logout:
+    post:
+      summary: Logout a user
+      tags: [Users]
+      responses:
+        200:
+          description: User logged out successfully
+
+  /users/profile:
+    get:
+      summary: Get user profile
+      tags: [Users]
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: User profile retrieved successfully
+        401:
+          description: Unauthorized
+    put:
+      summary: Update user profile
+      tags: [Users]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        200:
+          description: User profile updated successfully
+        400:
+          description: Invalid user data
+        401:
+          description: Unauthorized
+
+  /users/add-favourites:
+    post:
+      summary: Add perfume to favourites
+      tags: [Users]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                perfumeId:
+                  type: string
+      responses:
+        200:
+          description: Perfume added to favourites
+        401:
+          description: Unauthorized
+
+  /users/recommend-perfumes:
+    post:
+      summary: Get perfume recommendations
+      tags: [Users]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+      responses:
+        200:
+          description: Perfume recommendations retrieved successfully
+
+  /users/favourites:
+    get:
+      summary: Get favourite perfumes
+      tags: [Users]
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Favourite perfumes retrieved successfully
+        401:
+          description: Unauthorized
+
+  /users/favourites/remove:
+    delete:
+      summary: Remove perfume from favourites
+      tags: [Users]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                perfumeId:
+                  type: string
+      responses:
+        200:
+          description: Perfume removed from favourites
+        401:
+          description: Unauthorized
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
